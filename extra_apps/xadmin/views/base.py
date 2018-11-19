@@ -473,6 +473,7 @@ class CommAdminView(BaseAdminView):
             'title': _('Home')
             }]
 
+
 class ModelAdminView(CommAdminView):
 
     fields = None

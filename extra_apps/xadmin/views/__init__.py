@@ -15,8 +15,9 @@ __all__ = (
     'ModelFormAdminView', 'CreateAdminView', 'UpdateAdminView', 'DeleteAdminView', 'DetailAdminView', 'FormAdminView',
     'Dashboard', 'BaseWidget',
     'IndexView', 'LoginView', 'LogoutView',
-    'filter_hook', 'csrf_protect_m'
+    'filter_hook', 'csrf_protect_m', 'register_builtin_views'
 )
+
 
 # admin site-wide views
 def register_builtin_views(site):

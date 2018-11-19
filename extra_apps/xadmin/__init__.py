@@ -1,7 +1,7 @@
-
-VERSION = (0,6,0)
-
 from xadmin.sites import AdminSite, site
+
+VERSION = (0, 6, 0)
+
 
 class Settings(object):
     pass
@@ -52,7 +52,7 @@ def autodiscover():
         try:
             before_import_registry = site.copy_registry()
             import_module('%s.adminx' % app)
-        except:
+        except Exception:
             # Reset the model registry to the state before the last import as
             # this import will have to reoccur on the next request and this
             # could raise NotRegistered and AlreadyRegistered exceptions
@@ -64,5 +64,6 @@ def autodiscover():
             # attempting to import it, otherwise we want it to bubble up.
             if module_has_submodule(mod, 'adminx'):
                 raise
+
 
 default_app_config = 'xadmin.apps.XAdminConfig'

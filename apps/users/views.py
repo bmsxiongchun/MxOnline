@@ -1,5 +1,5 @@
 # _*_ encoding:utf-8 _*_
-import  json
+import json
 
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
@@ -30,6 +30,7 @@ class CustomBackend(ModelBackend):
                 return user
         except Exception as e:
             return None
+
 
 class AciveUserView(View):
     def get(self, request, active_code):
@@ -64,7 +65,7 @@ class RegisterView(View):
             user_profile.password = make_password(pass_word)
             user_profile.save()
 
-            #写入欢迎注册消息
+            # 写入欢迎注册消息
             user_message = UserMessage()
             user_message.user = user_profile.id
             user_message.message = "欢迎注册慕学在线网"
@@ -84,9 +85,11 @@ class LogoutView(View):
         logout(request)
         return HttpResponseRedirect(reverse("index"))
 
+
 class LoginView(View):
     def get(self, request):
         return render(request, "login.html", {})
+
     def post(self, request):
         login_form = LoginForm(request.POST)
         if login_form.is_valid():
@@ -131,6 +134,7 @@ class ResetView(View):
             return render(request, "active_fail.html")
         return render(request, "login.html")
 
+
 class ModifyPwdView(View):
     """
     修改用户密码
@@ -169,8 +173,6 @@ class UserinfoView(LoginRequiredMixin, View):
             return HttpResponse(json.dumps(user_info_form.errors), content_type='application/json')
 
 
-
-
 class UploadImageView(LoginRequiredMixin, View):
     """
     用户修改头像
@@ -182,7 +184,6 @@ class UploadImageView(LoginRequiredMixin, View):
             return HttpResponse('{"status":"success"}', content_type='application/json')
         else:
             return HttpResponse('{"status":"fail"}', content_type='application/json')
-
 
 
 class UpdatePwdView(View):
@@ -244,7 +245,7 @@ class MyCourseView(LoginRequiredMixin, View):
     def get(self, request):
         user_courses = UserCourse.objects.filter(user=request.user)
         return render(request, 'usercenter-mycourse.html', {
-            "user_courses":user_courses
+            "user_courses": user_courses
         })
 
 
@@ -260,7 +261,7 @@ class MyFavOrgView(LoginRequiredMixin, View):
             org = CourseOrg.objects.get(id=org_id)
             org_list.append(org)
         return render(request, 'usercenter-fav-org.html', {
-            "org_list":org_list
+            "org_list": org_list
         })
 
 
@@ -276,7 +277,7 @@ class MyFavTeacherView(LoginRequiredMixin, View):
             teacher = Teacher.objects.get(id=teacher_id)
             teacher_list.append(teacher)
         return render(request, 'usercenter-fav-teacher.html', {
-            "teacher_list":teacher_list
+            "teacher_list": teacher_list
         })
 
 
@@ -292,7 +293,7 @@ class MyFavCourseView(LoginRequiredMixin, View):
             teacher = Course.objects.get(id=course_id)
             course_list.append(teacher)
         return render(request, 'usercenter-fav-course.html', {
-            "course_list":course_list
+            "course_list": course_list
         })
 
 
@@ -302,14 +303,13 @@ class MymessageView(LoginRequiredMixin, View):
     """
     def get(self, request):
         all_messages = UserMessage.objects.filter(user=request.user.id)
-
-        #用户进入个人消息后清空未读消息的记录
+        # 用户进入个人消息后清空未读消息的记录
         all_unread_messages = UserMessage.objects.filter(user=request.user.id, has_read=False)
         for unread_message in all_unread_messages:
             unread_message.has_read = True
             unread_message.save()
 
-        #对个人消息进行分页
+        # 对个人消息进行分页
         try:
             page = request.GET.get('page', 1)
         except PageNotAnInteger:
@@ -319,35 +319,36 @@ class MymessageView(LoginRequiredMixin, View):
 
         messages = p.page(page)
         return render(request, 'usercenter-message.html', {
-            "messages":messages
+            "messages": messages
         })
 
 
 class IndexView(View):
-    #慕学在线网 首页
+    # 慕学在线网 首页
     def get(self, request):
-        #取出轮播图
+        # 取出轮播图
         all_banners = Banner.objects.all().order_by('index')
         courses = Course.objects.filter(is_banner=False)[:6]
         banner_courses = Course.objects.filter(is_banner=True)[:3]
         course_orgs = CourseOrg.objects.all()[:15]
         return render(request, 'index.html', {
-            'all_banners':all_banners,
-            'courses':courses,
-            'banner_courses':banner_courses,
-            'course_orgs':course_orgs
+            'all_banners': all_banners,
+            'courses': courses,
+            'banner_courses': banner_courses,
+            'course_orgs': course_orgs
         })
 
 
 def page_not_found(request):
-    #全局404处理函数
+    # 全局404处理函数
     from django.shortcuts import render_to_response
     response = render_to_response('404.html', {})
     response.status_code = 404
     return response
 
+
 def page_error(request):
-    #全局500处理函数
+    # 全局500处理函数
     from django.shortcuts import render_to_response
     response = render_to_response('500.html', {})
     response.status_code = 500
