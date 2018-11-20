@@ -11,9 +11,11 @@ class LessonInline(object):
     model = Lesson
     extra = 0
 
+
 class CourseResourceInline(object):
     model = CourseResource
     extra = 0
+
 
 class CourseAdmin(object):
     list_display = ['name', 'desc', 'detail', 'degree', 'learn_times', 'students', 'get_zj_nums', 'go_to']
@@ -33,7 +35,7 @@ class CourseAdmin(object):
         return qs
 
     def save_models(self):
-        #在保存课程的时候统计课程机构的课程数
+        # 在保存课程的时候统计课程机构的课程数
         obj = self.new_obj
         obj.save()
         if obj.course_org is not None:

@@ -148,7 +148,7 @@ EMAIL_HOST = "smtp.sina.com"
 EMAIL_PORT = 25
 EMAIL_HOST_USER = "projectsedu@sina.com"
 EMAIL_HOST_PASSWORD = "admin123"
-EMAIL_USE_TLS= False
+EMAIL_USE_TLS = False
 EMAIL_FROM = "projectsedu@sina.com"
 
 MEDIA_URL = '/media/'
